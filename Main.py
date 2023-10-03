@@ -22,16 +22,12 @@ token="XfeZrJIh1meAmMM38vJVlDoKvfzY2HrX2PpPEFqWRir"
 headers = {"Authorization": "Bearer " + token}
 
 THROUD = 30 #0~100 人間の有無の閾値
-FPS = 2
+MAX_HUMAN_DETECTION=2
 
-max_presence_time = 0.5
-max_absence_time = 1
-presence_time = 0
-absence_time = 0
-prev_exist_state=[0,0]
+human_detection=0
+prev_flag = 0
 
 isStarted = False
-prev_exist = False
 shot_flag = False
 
 # クラスを読み込む
@@ -56,13 +52,11 @@ while ret == True:
     # 計測開始
     now_time=time.time()
     delta_time=now_time-pre_time
-    print("経過時間",int(delta_time*1000),"ms")
     pre_time=now_time
 
-    # モーション関数
+    # モーション関数と差分フレーム
     flag,diff=md.detect(frame,THROUD,30)
-    
-    # 差分フレームを表示
+    flag=int(flag)
     cv2.imshow("diff",diff)
     
     # 人が存在していない状態から初めて人が存在したか？
@@ -70,24 +64,21 @@ while ret == True:
         isStarted=True
         vc.Speak("hello1")
 
-    # 人の存在状況を更新し、前回との差分を取る
-    human_exist=flag
-    human_move=int(human_exist)-int(prev_exist)
-    
-    # 人が存在する場合、存在時間の制限値を増やす。
-    if(human_exist):
-        absence_time=0
-        presence_time+=1
-    # 存在しない場合、非存在時間の制限値を増やす
+    if(flag):
+        human_detection+=delta_time
     else:
-        presence_time=0
-        absence_time+=1
+        human_detection-=delta_time
 
-    # 存在時間の制限値に基づいて、存在フラグを判断する
-    exist_flag=[presence_time>max_presence_time*FPS,absence_time>max_absence_time*FPS]
-    
+    # human_detectionをある値に整形する
+    if(human_detection > MAX_HUMAN_DETECTION ):
+        human_detection=MAX_HUMAN_DETECTION
+    elif(human_detection < 0):
+        human_detection=0
+
+    print("人間検知秒数",int(human_detection*1000),"ms")
+
     # 存在フラグが変化し、かつshot_flagがFalseである場合、LINE通知関数を呼び出す。
-    if exist_flag[0]-prev_exist_state[0]==1 and not shot_flag and isStarted:
+    if human_detection>=MAX_HUMAN_DETECTION and not shot_flag and isStarted:
         if(Arduino):
             sc_left.move(4)
         vc.Greeting_Speak()
@@ -100,7 +91,7 @@ while ret == True:
         shot_flag=True
         if(Arduino):
             sc_left.move(0)
-    elif exist_flag[1]-prev_exist_state[1]==-1:
+    elif flag-prev_flag==-1:
         shot_flag=False
 
     # "q"キーが押された？
@@ -108,11 +99,8 @@ while ret == True:
     if key == ord('q'):
         break
 
-    # time.sleep(1/FPS)
-
     # 状態を更新
-    prev_exist=human_exist
-    prev_exist_state=exist_flag
+    prev_flag=flag
     ret, frame = cap.read()
     print()
 
