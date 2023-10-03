@@ -20,8 +20,9 @@ url="https://notify-api.line.me/api/notify"
 token="XfeZrJIh1meAmMM38vJVlDoKvfzY2HrX2PpPEFqWRir"
 headers = {"Authorization": "Bearer " + token}
 
-THROUD = 2.0e6
+THROUD = 50 #0~100 人間の有無の閾値
 FPS = 60
+
 max_presence_time = 0.5
 max_absence_time = 1
 presence_time = 0
