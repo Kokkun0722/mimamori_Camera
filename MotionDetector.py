@@ -25,6 +25,6 @@ class MotionDetector:
         gray_diff = cv2.cvtColor(gray_diff, cv2.COLOR_GRAY2BGR)
         cv2.rectangle(gray_diff, (50, 80), (125, 130), color, thickness=-1)
 
-        print("画面占有率："+str(int(screen_occupation_rate))+"%")
+        print("画面占有率：",int(screen_occupation_rate),"%")
 
         return screen_occupation_rate > threshold, gray_diff

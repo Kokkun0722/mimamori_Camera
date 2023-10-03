@@ -2,6 +2,7 @@ import cv2,time
 import Voice as VC
 import MotionDetector as MD
 import LineUploder as LU
+import time
 # import ServoController as SC
 
 Arduino=False
@@ -21,7 +22,7 @@ token="XfeZrJIh1meAmMM38vJVlDoKvfzY2HrX2PpPEFqWRir"
 headers = {"Authorization": "Bearer " + token}
 
 THROUD = 50 #0~100 人間の有無の閾値
-FPS = 60
+FPS = 2
 
 max_presence_time = 0.5
 max_absence_time = 1
@@ -50,7 +51,14 @@ if(Arduino):
     sc_left.move(0)
     sc_right.move(0)
 
+pre_time=time.time()
 while ret == True:
+    # 計測開始
+    now_time=time.time()
+    delta_time=now_time-pre_time
+    print("経過時間",int(delta_time*1000),"ms")
+    pre_time=now_time
+
     # モーション関数
     flag,diff=md.detect(frame,THROUD,30)
     
@@ -61,7 +69,6 @@ while ret == True:
     if(not isStarted and not flag):
         isStarted=True
         vc.Speak("hello1")
-        vc.Greeting_Speak()
 
     # 人の存在状況を更新し、前回との差分を取る
     human_exist=flag
@@ -109,12 +116,13 @@ while ret == True:
     if key == ord('q'):
         break
 
-    time.sleep(1/FPS)
+    # time.sleep(1/FPS)
 
     # 状態を更新
     prev_exist=human_exist
     prev_exist_state=exist_flag
     ret, frame = cap.read()
+    print()
 
 cv2.destroyAllWindows()
 cap.release()
