@@ -21,8 +21,8 @@ url="https://notify-api.line.me/api/notify"
 token="XfeZrJIh1meAmMM38vJVlDoKvfzY2HrX2PpPEFqWRir"
 headers = {"Authorization": "Bearer " + token}
 
-THROUD = 50 #0~100 画面占有率
-MAX_HUMAN_DETECTION=1 #秒数　人間検知秒数
+THROUD = 20 #0~100 画面占有率
+MAX_HUMAN_DETECTION=5 #秒数　人間検知秒数
 
 human_detection=0
 prev_flag = 0
@@ -69,12 +69,11 @@ while ret == True:
             human_detection+=delta_time
         else:
             human_detection-=delta_time
-
-    # human_detectionをある値に整形する
-    if(human_detection > MAX_HUMAN_DETECTION ):
-        human_detection=MAX_HUMAN_DETECTION
-    elif(human_detection < 0):
-        human_detection=0
+        # human_detectionをある値に整形する
+        if(human_detection > MAX_HUMAN_DETECTION ):
+            human_detection=MAX_HUMAN_DETECTION
+        elif(human_detection < 0):
+            human_detection=0
 
     print("人間検知秒数",int(human_detection*1000),"ms")
 
