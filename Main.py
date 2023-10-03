@@ -21,7 +21,7 @@ url="https://notify-api.line.me/api/notify"
 token="XfeZrJIh1meAmMM38vJVlDoKvfzY2HrX2PpPEFqWRir"
 headers = {"Authorization": "Bearer " + token}
 
-THROUD = 50 #0~100 人間の有無の閾値
+THROUD = 30 #0~100 人間の有無の閾値
 FPS = 2
 
 max_presence_time = 0.5
@@ -90,24 +90,16 @@ while ret == True:
     if exist_flag[0]-prev_exist_state[0]==1 and not shot_flag and isStarted:
         if(Arduino):
             sc_left.move(4)
-            vc.Greeting_Speak()
-            time.sleep(0.5)
-            vc.Date_Speak()
-            vc.WeekDay_Speak()
-            time.sleep(0.5)
-            vc.Time_Speak()
-            lu.upload(frame)
-            shot_flag=True
+        vc.Greeting_Speak()
+        time.sleep(0.5)
+        vc.Date_Speak()
+        vc.WeekDay_Speak()
+        time.sleep(0.5)
+        vc.Time_Speak()
+        lu.upload(frame)
+        shot_flag=True
+        if(Arduino):
             sc_left.move(0)
-        else:
-            vc.Greeting_Speak()
-            time.sleep(0.5)
-            vc.Date_Speak()
-            vc.WeekDay_Speak()
-            time.sleep(0.5)
-            vc.Time_Speak()
-            lu.upload(frame)
-            shot_flag=True
     elif exist_flag[1]-prev_exist_state[1]==-1:
         shot_flag=False
 
