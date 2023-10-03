@@ -21,8 +21,8 @@ url="https://notify-api.line.me/api/notify"
 token="XfeZrJIh1meAmMM38vJVlDoKvfzY2HrX2PpPEFqWRir"
 headers = {"Authorization": "Bearer " + token}
 
-THROUD = 30 #0~100 人間の有無の閾値
-MAX_HUMAN_DETECTION=2
+THROUD = 50 #0~100 画面占有率
+MAX_HUMAN_DETECTION=1 #秒数　人間検知秒数
 
 human_detection=0
 prev_flag = 0
@@ -64,10 +64,11 @@ while ret == True:
         isStarted=True
         vc.Speak("hello1")
 
-    if(flag):
-        human_detection+=delta_time
-    else:
-        human_detection-=delta_time
+    if(isStarted):
+        if(flag):
+            human_detection+=delta_time
+        else:
+            human_detection-=delta_time
 
     # human_detectionをある値に整形する
     if(human_detection > MAX_HUMAN_DETECTION ):
