@@ -21,8 +21,8 @@ url="https://notify-api.line.me/api/notify"
 token="XfeZrJIh1meAmMM38vJVlDoKvfzY2HrX2PpPEFqWRir"
 headers = {"Authorization": "Bearer " + token}
 
-THROUD = 20 #0~100 画面占有率
-MAX_HUMAN_DETECTION=5 #秒数　人間検知秒数
+THROUD = 25 #0~100 画面占有率
+MAX_HUMAN_DETECTION=1 #秒数　人間検知秒数
 
 human_detection=0
 prev_flag = 0
@@ -52,6 +52,8 @@ while ret == True:
     # 計測開始
     now_time=time.time()
     delta_time=now_time-pre_time
+    if(delta_time>0.1):
+        delta_time=0.1
     pre_time=now_time
 
     # モーション関数と差分フレーム

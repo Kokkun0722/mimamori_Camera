@@ -4,6 +4,7 @@ import pygame.mixer
 import time
 from mutagen.mp3 import MP3
 import datetime
+import pyttsx3
 
 class Voice:
     def __init__(self,DIR_NAME):
@@ -19,6 +20,9 @@ class Voice:
         self.now = datetime.datetime.now()
         self.hour=self.now.hour
         self.DIR_NAME=DIR_NAME
+
+        # Call関係
+        self.engine = pyttsx3.init()
     
     # 喋る
     def Speak(self, voice):
@@ -90,8 +94,17 @@ class Voice:
         self.Time_Speak(n=2)
         self.Speak(self.serif_list[0])
 
+    def Call(self, message):
+        #喋らせる
+        self.engine.say(message)
+        self.engine.runAndWait()
+
 if __name__=='__main__':
     DIR_NAME=r"/home/pi/Desktop/VOICE/{}.mp3"
     vc=Voice(DIR_NAME)
+    """
     vc.Run_Date()
     vc.Run_Time()
+    """
+    vc.Call("文字列を読み上げるやつ。文字列から直接行けるよ。")
+
