@@ -15,7 +15,6 @@ Arduino=False
 UPLOAD_IMAGE=r'C:\Users\佃萌名\output.jpg'
 DIR_NAME=r"c:\Users\佃萌名\Desktop\VOICE\{}.mp3"
 
-
 # 変数を入れる
 url="https://notify-api.line.me/api/notify"
 token="XfeZrJIh1meAmMM38vJVlDoKvfzY2HrX2PpPEFqWRir"
@@ -23,6 +22,7 @@ headers = {"Authorization": "Bearer " + token}
 
 THROUD = 25 #0~100 画面占有率
 MAX_HUMAN_DETECTION=1 #秒数　人間検知秒数
+RATE=75 #Call関数の喋る速度
 
 human_detection=0
 prev_flag = 0
@@ -31,7 +31,7 @@ isStarted = False
 shot_flag = False
 
 # クラスを読み込む
-vc=VC.Voice(DIR_NAME)
+vc=VC.Voice(DIR_NAME,RATE)
 md=MD.MotionDetector()
 lu=LU.LineUploader(url, token, headers,UPLOAD_IMAGE)
 if(Arduino):

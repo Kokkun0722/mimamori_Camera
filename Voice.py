@@ -7,7 +7,7 @@ import datetime
 import pyttsx3
 
 class Voice:
-    def __init__(self,DIR_NAME):
+    def __init__(self,DIR_NAME,rate):
         # セットアップ
         self.name_list=["greeting","num","week","date","serif","hello"]
         for name in self.name_list:
@@ -23,6 +23,7 @@ class Voice:
 
         # Call関係
         self.engine = pyttsx3.init()
+        self.engine.setProperty('rate', rate)
     
     # 喋る
     def Speak(self, voice):
@@ -101,10 +102,10 @@ class Voice:
 
 if __name__=='__main__':
     DIR_NAME=r"/home/pi/Desktop/VOICE/{}.mp3"
-    vc=Voice(DIR_NAME)
+    vc=Voice(DIR_NAME,75)
     """
     vc.Run_Date()
     vc.Run_Time()
     """
-    vc.Call("文字列を読み上げるやつ。文字列から直接行けるよ。")
-
+    vc.Call("""むかし、むかし、ある所におじいさんとおばあさんが住んでいました。
+おじいさんは山へしば刈りに、おばあさんは川へ洗濯に行きました。""")
